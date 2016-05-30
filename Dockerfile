@@ -40,7 +40,7 @@ RUN apt-get update && \
 # Configure self-service-password site
 RUN mkdir -p /certs
 ADD assets/self-service-password /etc/apache2/sites-available/self-service-password
-ADD assets/passphrase.sh /certs/passphrase.sh
+ADD assets/passphrase.sh /usr/share/self-service-password/conf/passphrase.sh
 RUN ln -s self-service-password /etc/apache2/sites-available/self-service-password.conf && \
 	ln -s ../../mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini && \
 	a2enmod ssl && a2enmod rewrite && \
