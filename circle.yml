@@ -1,0 +1,23 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - echo "no install"
+
+test:
+  override:
+    - echo "no tests!"
+
+deployment:
+  hub:
+    tag: /^[0-9]+\.[0-9]++$/
+    commands:
+      - docker build -t ictu/self-service-password:${CIRCLE_TAG} .
+      - MAJOR_VERSION=${CIRCLE_TAG/.*}; docker tag ictu/self-service-password:${CIRCLE_TAG} ictu/self-service-password:${MAJOR_VERSION}
+      - MINOR_VERSION=${CIRCLE_TAG%.*}; docker tag ictu/self-service-password:${CIRCLE_TAG} ictu/self-service-password:${MINOR_VERSION}
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push ictu/self-service-password:${CIRCLE_TAG}
+      - docker push ictu/self-service-password:${MINOR_VERSION}
+      - docker push ictu/self-service-password:${MAJOR_VERSION}

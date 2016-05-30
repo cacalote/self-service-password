@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  ssp:
+    image: ictu/self-service-password
+    ports:
+      - "8080:80"
+    environment:
+      - "SMTP_HOST=localhost"
+      - "MAIL_FROM=password-service@example.com"
+      - "LDAP_URL=ldap://localhost:389"
+      - "LDAP_BINDDN=cn=admin,dc=example,dc=com"
+      - "LDAP_BINDPW=secret"
+      - "LDAP_BASE=dc=example,dc=com"
+      - "LDAP_LOGIN_ATTRIBUTE=uid"
+      - "LDAP_FULLNAME_ATTRIBUTE=cn"
+      - "LDAP_FILTER=(&(objectClass=person)(uid={login}))"
+      - "PWD_MIN_LENGTH=0"
+      - "PWD_MAX_LENGTH=0"
+      - "PWD_MIN_LOWER=0"
+      - "PWD_MIN_UPPER=0"
+      - "PWD_MIN_DIGIT=0"
+      - "PWD_MIN_SPECIAL=0"
+      - "PWD_SPECIAL_CHARS=^a-zA-Z0-9"
+      - "PWD_NO_REUSE=true"
+      - "PWD_COMPLEXITY=0"
