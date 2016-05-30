@@ -6,7 +6,8 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Environment for Apache configuration
 ENV SMTP_HOST="localhost" \
-    MAIL_FROM="password-service@example.com"
+    MAIL_FROM="password-service@example.com" \
+    SSL_CERT_PASS="top-secret"
 
 # Environment for LDAP configuration
 ENV LDAP_URL="ldap://localhost" \
@@ -37,8 +38,12 @@ RUN apt-get update && \
 	rm -f self-service-password.deb
 
 # Configure self-service-password site
+RUN mkdir -p /certs
+ADD assets/self-service-password /etc/apache2/sites-available/self-service-password
+ADD assets/passphrase.sh /certs/passphrase.sh
 RUN ln -s self-service-password /etc/apache2/sites-available/self-service-password.conf && \
 	ln -s ../../mods-available/mcrypt.ini /etc/php5/apache2/conf.d/20-mcrypt.ini && \
+	a2enmod ssl && a2enmod rewrite && \
 	a2dissite 000-default && \
 	a2ensite self-service-password
 
@@ -48,12 +53,8 @@ ADD assets/config.inc.php /usr/share/self-service-password/conf/config.inc.php
 # Add ICTU logo
 ADD assets/ictu-logo.svg /usr/share/self-service-password/style/ictu-logo.svg
 
-# Configure Sendmail and PHP for remote SMTP relay
-#RUN sed -i "s/SMTP = localhost/SMTP = \${SMTP_HOST}/g" /etc/php5/apache2/php.ini && \
-#	sed -i "s/\(^DS\)/DS\${SMTP_HOST}/g" /etc/mail/sendmail.cf
-
 # Start Apache2 as runit service
 RUN mkdir /etc/service/apache2
 ADD assets/apache2.sh /etc/service/apache2/run
 
-EXPOSE 80
+EXPOSE 80 443
