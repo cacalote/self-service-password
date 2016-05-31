@@ -85,11 +85,11 @@ $pwd_complexity = getenv('PWD_COMPLEXITY');
 # always
 # never
 # onerror
-$pwd_show_policy = "never";
+$pwd_show_policy = getenv('PWD_SHOW_POLICY');
 # Position of password policy constraints message:
 # above - the form
 # below - the form
-$pwd_show_policy_pos = "above";
+$pwd_show_policy_pos = getenv('PWD_SHOW_POLICY_POS');
 
 # Who changes the password?
 # Also applicable for question/answer save

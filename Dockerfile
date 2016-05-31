@@ -27,7 +27,9 @@ ENV PWD_MIN_LENGTH=0 \
     PWD_MIN_SPECIAL=0 \
     PWD_SPECIAL_CHARS="^a-zA-Z0-9" \
     PWD_NO_REUSE=true \
-    PWD_COMPLEXITY=0
+    PWD_COMPLEXITY=0 \
+    PWD_SHOW_POLICY=never \
+    PWD_SHOW_POLICY_POS=above
 
 # Install Apache2, PHP and LTB ssp
 RUN apt-get update && \
